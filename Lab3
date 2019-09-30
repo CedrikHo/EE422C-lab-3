@@ -1,0 +1,22 @@
+
+
+ public static void initialize() {
+        dictionary = makeDictionary();
+    }
+
+public static Set<String> makeDictionary() {
+        Set<String> words = new HashSet<>();
+        Scanner infile = null;
+        try {
+			infile = new Scanner (new File("five_letter_words.txt"));
+        } 
+        catch (FileNotFoundException e) {
+            System.out.println("Dictionary File not Found!");
+            e.printStackTrace();
+            System.exit(1);
+        }
+        while (infile.hasNext()) {
+            words.add(infile.next().toUpperCase());
+        }
+        return words;
+    }
