@@ -1,6 +1,6 @@
-
-
- public static void initialize() {
+public static void main(String[] args) throws Exception {
+ 
+public static void initialize() {
         dictionary = makeDictionary();
     }
 
@@ -13,10 +13,12 @@ public static Set<String> makeDictionary() {
         catch (FileNotFoundException e) {
             System.out.println("Dictionary File not Found!");
             e.printStackTrace();
-            System.exit(1);
+          return
         }
         while (infile.hasNext()) {
             words.add(infile.next().toUpperCase());
         }
         return words;
+    }
+    
     }
