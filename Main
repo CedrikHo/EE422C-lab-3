@@ -1,0 +1,83 @@
+package assignment3;
+
+import java.util.*;
+import java.io.*;
+
+public class Main {
+    static Set<String> isVisitied;
+    static Set<String> dictionary;
+    static Set<Node> queue;
+    public static void main(String[] args){
+        Scanner keyboard=new Scanner(System.in);
+        initialize();
+        ArrayList<String> inputs=parse(keyboard);
+        while (checkInput(inputs)){
+            String start=inputs.get(0).toLowerCase();
+            String end=inputs.get(1).toLowerCase();
+            //
+            ArrayList<String> ladder=getWordLadderBFS(start,end);
+            //
+            printLadder(ladder);
+            inputs=parse(keyboard);
+        }
+    }
+    public static void initialize(){
+        isVisitied= new HashSet<>();
+        queue=new LinkedHashSet<>();
+        dictionary=makeDictionary();
+    }
+    public static ArrayList<String> parse(Scanner keyboard){
+        ArrayList<String> inputs=new ArrayList<>();
+        inputs.add(keyboard.next());
+        inputs.add(keyboard.next());
+        return inputs;
+    }
+    public static ArrayList<String> getWordLaddderDFS(String start,String end){
+        ArrayList<String> ladder=new ArrayList<>();
+        ladder.add(start);
+        ladder.add(end);
+        return ladder;
+    }
+    public static ArrayList<String> getWordLadderBFS(String start,String end){
+        ArrayList<String> ladder=new ArrayList<>();
+        ladder.add(start);
+        ladder.add("middle");
+        ladder.add(end);
+        return ladder;
+    }
+    public static void printLadder(ArrayList<String> ladder){
+        for (String word :
+                ladder) {
+            System.out.println(word);
+        }
+    }
+    public static TreeSet<String> makeDictionary(){
+        TreeSet<String> dict=new TreeSet<>();
+        String fileName= "C:\\Users\\kolbe\\Downloads\\Semester3\\422c\\Project3\\src\\five_letter_words.txt";//five_letter_words.txt//C:\Users\kolbe\Downloads\Semester3\422c\Project3\src\five_letter_words.txt
+        try{
+            Scanner inFile=new Scanner(new File(fileName));
+            while(inFile.hasNext()){
+                dict.add(inFile.next().toLowerCase());
+            }
+        }catch (FileNotFoundException e){
+            System.out.println("File '"+fileName+"' is missing or not found.");
+            e.printStackTrace();
+        }
+        return dict;
+    }
+    public static boolean checkInput(ArrayList<String> inputs){
+        if(inputs.size()>2) {
+            System.out.println("size>2");
+            return false;
+        }
+        for (String s : inputs) {
+            if (s.equals("/quit")) {
+                return false;
+            }
+            else if(!dictionary.contains(s)) {
+                return false;
+            }
+        }
+        return true;
+    }
+}

@@ -1,0 +1,36 @@
+package assignment3;
+
+public class Node {
+    private String word;
+    private Node parent;
+    public Node(String w,Node p){
+        word=w;
+        parent=p;
+    }
+
+    public String getWord() {
+        return word;
+    }
+
+    public Node getParent() {
+        return parent;
+    }
+
+    @Override
+    public String toString() {
+        return word;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof Node))
+            return false;
+        Node n=(Node)obj;
+        return this.word.equals(n.word);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+}
