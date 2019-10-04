@@ -15,7 +15,8 @@ public class Main {
             String start=inputs.get(0).toLowerCase();
             String end=inputs.get(1).toLowerCase();
             //
-            ArrayList<String> ladder=getWordLadderBFS(start,end);
+            //ArrayList<String> ladder=getWordLadderBFS(start,end);
+            ArrayList<String> ladder=getWordLaddderDFS(start,end);
             //
             printLadder(ladder);
             inputs=parse(keyboard);
@@ -34,18 +35,52 @@ public class Main {
     }
     public static ArrayList<String> getWordLaddderDFS(String start,String end){
         ArrayList<String> ladder=new ArrayList<>();
-        ladder.add(start);
-        ladder.add(end);
+        isVisitied.removeAll(isVisitied);
+        boolean found=recursionDFS(ladder,start,end);
+        if(!found){
+            ladder.add(start);
+            ladder.add(end);
+        }
         return ladder;
+    }
+    public static boolean recursionDFS(ArrayList<String> ladder,String start,String end){
+        ladder.add(start);
+        boolean finished=false;
+        Iterator<String> it=dictionary.iterator();
+        while (it.hasNext()&&!finished){
+            String myIt=it.next();
+            if(!isVisitied.contains(myIt)){
+                int difference=0;
+                int index=0;
+                String s="";
+                while(difference<2&&s.length()<myIt.length()){
+                    s+=myIt.substring(index,index+1);
+                    if(!(myIt.substring(index,index+1).equals(start.substring(index,index+1)))){
+                        difference++;
+                    }
+                    index++;
+                }
+                if(difference<2) {
+                    if(myIt.equals(end)){
+                        ladder.add(end);
+                        return true;
+                    }
+                    isVisitied.add(myIt);
+                    finished=recursionDFS(ladder,myIt,end);
+                }
+            }
+        }
+        if(!finished){
+            ladder.remove(start);
+            return false;
+        }
+        else {
+            return true;
+        }
     }
     public static ArrayList<String> getWordLadderBFS(String start,String end){
         ArrayList<String> ladder=new ArrayList<>();
-        /*ladder.add(start);
-        ladder.add("middle");
-        ladder.add(end);
-        return ladder;*/
-        //System.out.println("Starting BFS");
-        //System.out.println("Start word: "+start+"\nEnd word: "+end);
+        isVisitied.removeAll(isVisitied);
         isVisitied.add(start);
         Node n=new Node(start,null);
         queue.add(n);
@@ -59,6 +94,7 @@ public class Main {
         for(int index=ladder.size()-1;index>=0;index--){
             reverse.add(ladder.get(index));
         }
+        queue.removeAll(queue);
         return reverse;
     }
     public static Node recursionBFS(ArrayList<String> ladder,String end){
@@ -98,6 +134,8 @@ public class Main {
         return null;
     }
     public static void printLadder(ArrayList<String> ladder){
+        //a <N>-rung word ladder exists between <start> and <finish>.
+        System.out.println("a <"+(ladder.size()-2)+">-rung word ladder exists between <"+ladder.get(0)+"> and <"+ladder.get(ladder.size()-1)+">.");
         for (String word :
                 ladder) {
             System.out.println(word);

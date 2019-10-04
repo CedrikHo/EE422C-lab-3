@@ -8,12 +8,22 @@ public class MainTest {
 
     @org.junit.Test
     public void getWordLaddderDFS() {
+        Main.initialize();
+        String start1="stone";
+        String end1="money";
+
+        ArrayList<String> ladder1=Main.getWordLaddderDFS(start1,end1);
+
+        assertEquals("Compare starts",start1,ladder1.get(0));
+        assertEquals("Compare ends",end1,ladder1.get(ladder1.size()-1));
+
+        System.out.println(ladder1);
     }
 
     @org.junit.Test
     public void getWordLadderBFS() {
         Main.initialize();
-        String start1="smart";
+        String start1="stone";
         String end1="money";
 
         ArrayList<String> ladder1=Main.getWordLadderBFS(start1,end1);
