@@ -6,7 +6,7 @@ import java.io.*;
 public class Main {
     static Set<String> isVisitied;
     static Set<String> dictionary;
-    static Set<Node> queue;
+    static List<Node> queue;
     public static void main(String[] args){
         Scanner keyboard=new Scanner(System.in);
         initialize();
@@ -23,7 +23,7 @@ public class Main {
     }
     public static void initialize(){
         isVisitied= new HashSet<>();
-        queue=new LinkedHashSet<>();
+        queue=new LinkedList<>();
         dictionary=makeDictionary();
     }
     public static ArrayList<String> parse(Scanner keyboard){
@@ -40,16 +40,74 @@ public class Main {
     }
     public static ArrayList<String> getWordLadderBFS(String start,String end){
         ArrayList<String> ladder=new ArrayList<>();
-        ladder.add(start);
+        /*ladder.add(start);
         ladder.add("middle");
         ladder.add(end);
-        return ladder;
+        return ladder;*/
+        //System.out.println("Starting BFS");
+        //System.out.println("Start word: "+start+"\nEnd word: "+end);
+        isVisitied.add(start);
+        Node n=new Node(start,null);
+        queue.add(n);
+        n=recursionBFS(ladder,end);
+        if(ladder.size()==0){
+            ladder.add(end);
+            ladder.add(start);
+        }
+        //System.out.println(ladder);
+        ArrayList<String> reverse=new ArrayList<>();
+        for(int index=ladder.size()-1;index>=0;index--){
+            reverse.add(ladder.get(index));
+        }
+        return reverse;
+    }
+    public static Node recursionBFS(ArrayList<String> ladder,String end){
+        Node parent=queue.remove(0);
+        for (String myIterator:dictionary) {
+            int difference=0;
+            int index=0;
+            String s="";
+            while(difference<2&&s.length()<myIterator.length()){
+                s+=myIterator.substring(index,index+1);
+                if(!(myIterator.substring(index,index+1).equals(parent.getWord().substring(index,index+1)))){
+                    difference++;
+                }
+                index++;
+            }
+            if(difference<2) {
+                if (!(isVisitied.contains(s))) {
+                    Node child = new Node(myIterator, parent);
+                    if (child.getWord().equals(end)) {
+                        ladder.add(end);
+                        //ladder.add(child.getWord());
+                        return child.getParent();
+                    }
+                    isVisitied.add(child.getWord());
+                    queue.add(child);
+                }
+            }
+        }
+        parent = null;
+        if (!queue.isEmpty()) {
+            parent = recursionBFS(ladder, end);
+        }
+        if (parent != null) {
+            ladder.add(parent.getWord());
+            return parent.getParent();
+        }
+        return null;
     }
     public static void printLadder(ArrayList<String> ladder){
         for (String word :
                 ladder) {
             System.out.println(word);
         }
+        /*
+        Iterator<String> word=ladder.iterator();
+        while(word.hasNext()){
+            System.out.println(word.next);
+        }
+         */
     }
     public static TreeSet<String> makeDictionary(){
         TreeSet<String> dict=new TreeSet<>();
